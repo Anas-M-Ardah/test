@@ -21,35 +21,25 @@ export class productService {
       productInfo.price_after_discount.toFixed(2)
     );
   }
-  // This method to get new arrivals products
+  // Method to retrieve new arrival products
   static async getNewArrivalsProducts() {
     const currentMonth: number = new Date().getMonth() + 1;
-    let targetMonth: number = 0;
-    if (currentMonth === 1) {
-      targetMonth = 10;
-    } else if (currentMonth === 2) {
-      targetMonth = 11;
-    } else if (currentMonth === 3) {
-      targetMonth = 12;
-    } else {
-      targetMonth = currentMonth - 3;
-    }
-    const products: any = await Product.findAll({
+    const previousQuarterMonth: number = currentMonth >= 4 ? currentMonth - 3 : (currentMonth + 9) % 12 || 12;
+
+    const newProducts: any[] = await Product.findAll({
       where: Sequelize.where(
         Sequelize.fn("MONTH", Sequelize.col("createdAt")),
-        targetMonth
+        previousQuarterMonth
       ),
       raw: true,
     });
-    for (const product of products) {
+
+    newProducts.forEach(product => {
       this.addDiscountInfo(product);
-      delete product.stock;
-      delete product.merchant_id;
-      delete product.brand_name;
-      delete product.createdAt;
-      delete product.updatedAt;
-    }
-    return products;
+      ['stock', 'merchant_id', 'brand_name', 'createdAt', 'updatedAt'].forEach(field => delete product[field]);
+    });
+
+    return newProducts;
   }
   // This method to add rating information to product information
   static async addRatingInfo(productInfo: any) {
