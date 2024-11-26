@@ -29,11 +29,7 @@ export class productService {
     // Calculate the start date of the previous three months
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
-  
-    // Debugging dates
-    console.log('Current Date:', currentDate);
-    console.log('Three Months Ago:', threeMonthsAgo);
-  
+    
     try {
       // Fetch products created within the last three months
       const newProducts: any[] = await Product.findAll({
@@ -44,9 +40,6 @@ export class productService {
         },
         raw: true,
       });
-  
-      console.log('New Products Found:', newProducts.length);
-      console.log('New Products Details:', JSON.stringify(newProducts, null, 2));
   
       // Process products and clean up fields
       newProducts.forEach((product) => {

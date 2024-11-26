@@ -33,11 +33,11 @@ app.listen(PORT, async () => {
   await connectToDB();
   console.log("Connected to DB successfully.");
 
-  console.log("Setting up associations...");
-  await setupAssociations();
-  console.log("Associations set up successfully.");
+  // console.log("Setting up associations...");
+  // await setupAssociations();
+  // console.log("Associations set up successfully.");
 
-  //sync the models with the database
-  await sequelize.sync({ force: true });
-  console.log("Models synced successfully.");
+  // //sync the models with the database
+  // await sequelize.sync({ force: true });
+  // console.log("Models synced successfully.");
 });
